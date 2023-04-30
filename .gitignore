@@ -1,4 +1,5 @@
 node_modules/
+package-lock.json
 .expo/
 dist/
 npm-debug.*
@@ -12,4 +13,3 @@ web-build/
 .DS_Store
 .vscode
 .metro-health-check*
-package-lock.json
