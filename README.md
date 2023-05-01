@@ -1,6 +1,6 @@
 # Simple note mobile
 ### What is this app?
-A mobile app created by ***React Native***, allows you to create your notes and check list of tasks to do.
+A mobile app created by ***React Native***, allows you to create your notes.
 ### Run 
 ```bash
 npm install
