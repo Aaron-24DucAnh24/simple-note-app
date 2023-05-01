@@ -1,7 +1,6 @@
 import React from "react"
-import { StyleSheet, Text, TouchableOpacity, Alert } from "react-native"
-import Color from "../../assets/color"
-import API from '../../api/index'
+import { Text, TouchableOpacity, Alert } from "react-native"
+
 import styles from "./style"
 
 export default function NoteItem(props) {
@@ -16,7 +15,7 @@ export default function NoteItem(props) {
     }
 
     function openNote() {
-        props.navigation.navigate('detail', {self: props.self})
+        props.navigation.navigate(props.self.type=='note'?'detail':'task', {self: props.self})
     }
 
     return (

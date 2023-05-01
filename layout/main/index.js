@@ -2,9 +2,10 @@ import React, { useCallback } from "react"
 import { View, Text, ScrollView, TouchableOpacity, Alert } from "react-native"
 import styles from "./style"
 import AntDesignIcon from 'react-native-vector-icons/AntDesign'
-import Ionicon from 'react-native-vector-icons/Ionicons'
+import Octicon from 'react-native-vector-icons/Octicons'
 import Color from "../../assets/color"
 import NoteItem from "../../component/noteItem"
+import AddButton from "../../component/addButton"
 import { useState } from "react"
 import API from '../../api/index'
 import { useFocusEffect } from "@react-navigation/native"
@@ -14,6 +15,7 @@ export default function Main({navigation, route}) {
     const [noteItemList, setNoteItemList] = useState([])
     const [noteNumber, setNoteNumber] =  useState(0)
     const [name, setName] = useState('')
+    const [optionDisplay, setOptionDisplay] = useState({display: 'none'})
 
     function createAlert() {
         Alert.alert(name + ", bạn muốn đăng xuất?", "", 
@@ -84,11 +86,30 @@ export default function Main({navigation, route}) {
                 }
             </ScrollView>
 
-            <TouchableOpacity 
-                style={styles.addButtonContainer}
-                onPress={()=> navigation.navigate('detail', {self: null})}
+            <AddButton
+                onPress={()=>setOptionDisplay(optionDisplay.display?{}:{display: 'none'})}
+            />
+
+            <TouchableOpacity
+                onPress={()=> {
+                    navigation.navigate('detail', {self: null})
+                    setOptionDisplay({display: 'none'})
+                }}
+                style={[styles.noteButton, optionDisplay]}
             >
-                <Ionicon name="add-circle" size={60} color={Color.blue}/>
+                <Octicon name="note" size={32} color={Color.blue}/>
+                <Text style={styles.btnText}>{'Ghi chú'}</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+                style={[styles.taskButton, optionDisplay]}
+                onPress={()=> {
+                    navigation.navigate('task', {self: null})
+                    setOptionDisplay({display: 'none'})
+                }}
+            >
+                <Octicon name="tasklist" size={32} color={Color.blue}/>
+                <Text style={styles.btnText}>{'Công việc'}</Text>
             </TouchableOpacity>
 
         </View>

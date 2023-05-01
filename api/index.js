@@ -1,7 +1,7 @@
 
 import axios from "axios"
 
-const url = 'http://127.0.0.1:3000/'
+const url = 'https://c3e7-2405-4802-a29d-ae10-b161-485f-52a9-f7a1.ngrok-free.app/'
 
 class API {
     async login(username, password) {
@@ -34,23 +34,25 @@ class API {
         return data
     }
     
-    async addNote(title, content) {
+    async addNote(title, content, type) {
         const message = await axios.post(url+'note',
             {
                 'title': title,
-                'content': content
+                'content': content,
+                'type': type    
             }
         )
         const data = message.data
         return data
     }
 
-    async editNote(id ,title, content) {
+    async editNote(id ,title, content, type) {
         const message = await axios.put(url+'note',
             {
                 'id': id,
                 'title': title,
-                'content': content
+                'content': content,
+                'type': type
             }
         )
         const data = message.data

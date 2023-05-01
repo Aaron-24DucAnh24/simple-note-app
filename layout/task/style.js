@@ -1,9 +1,7 @@
 import { StyleSheet } from "react-native"
-import Color from '../../assets/color'
-
+import Color from "../../assets/color"
 
 const styles = StyleSheet.create({
-
     container: {
         width: '100%',
         height:'100%',
@@ -20,7 +18,6 @@ const styles = StyleSheet.create({
         alignItems: 'flex-end',
         justifyContent: "space-between",
         flexDirection: "row",
-        position: "relative"
     },
 
     titleContainer: {
@@ -34,55 +31,40 @@ const styles = StyleSheet.create({
         fontWeight: 700
     },
 
-    logoutContainer: {
+    saveContainer: {
+        width: 80,
         height: 40,
-        width: 40,
         justifyContent: "center",
         alignItems: "center",
-        position: "absolute",
-        right: 12,
+        flexDirection: "row",
+        position: 'absolute',
+        right: 20,
         bottom: 6,
     },
 
-    numBar: {
-        paddingHorizontal: 20,
-        paddingTop: 8,
-        paddingBottom: 20,
-    },
-
-    numBarText: {
-        color: Color.lightWhite,
-        fontStyle: "italic", 
-        fontSize: 14,
-    },
-
-    addButtonContainer: {
-        position: "absolute",
-        right: 32,
-        bottom: 32,
-        zIndex: 5,
-    },
-
-    noteButton: {
-        position: "absolute",
-        right: 120,
-        bottom: 32,
-        zIndex: 5,
-        alignItems: "center"
-    },
-
-    taskButton: {
-        position: "absolute",
-        right: 200,
-        bottom: 32,
-        zIndex: 5,
-        alignItems: "center"
-    },
-
-    btnText: {
+    saveText: {
         color: Color.white,
-        fontWeight: "500",
-    }
+        fontSize: 18,
+        fontWeight: 700
+    },
+
+    title: {
+        fontSize: 16,
+        color: Color.white,
+        fontWeight: "600",
+        marginHorizontal: 20,
+        marginTop: 20,
+        paddingVertical: 16,
+        paddingHorizontal: 12,
+        borderRadius: 8,
+        backgroundColor: Color.dark
+    },
+
+    content: {
+        width: '100%',
+        marginTop: 20,
+        marginBottom: 40,
+    },
 
 })
 

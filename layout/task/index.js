@@ -1,39 +1,45 @@
 import React, { useCallback, useState } from "react"
-import { View, Text, TouchableOpacity, Alert, TextInput } from "react-native"
+import { View, Text, TouchableOpacity, Alert, TextInput, ScrollView } from "react-native"
 import AntDesignIcon from 'react-native-vector-icons/AntDesign'
 import styles from "./style"
 import Color from "../../assets/color"
 import API from '../../api/index'
-import { useFocusEffect } from "@react-navigation/native"
+import TaskItem from "../../component/taskItem"
+import AddButton from "../../component/addButton"
 
-export default function Detail({navigation, route}) {
+export default function Task({navigation, route}) {
+
+    const gotInit = route.params.self != null
+    const [isSaved, setIsSaved] = useState(false)
+    const [self, setSelf] = useState(gotInit?JSON.parse(JSON.stringify(route.params.self)):{content: [], title: '', type: 'task'})
+    const preSelf = gotInit?route.params.self:{content: [], title: '', type: 'task'}
+
+    function isChanged() {
+        return JSON.stringify(preSelf)!=JSON.stringify(self)
+    }
 
     function createExitAlert() {
         Alert.alert("Bạn có muốn lưu thay đổi?", "",
             [
-                {text: 'OK', onPress: route.params.self?editNote:addNote},
+                {text: 'OK', onPress: gotInit?editNote:addNote},
                 {text: 'Không', onPress: ()=>navigation.navigate('main')}
             ]
         )
     }
 
-    function isChanged() {
-        return preContent!=content || preTitle!=title
-    }
-
     function handleExit() {
-        if(!isChanged() || isSaved) {
+
+        if(!isChanged() || isSaved)
             navigation.navigate('main')
-        } else {
+        else
             createExitAlert()
-        }
     }
 
     async function addNote() {
         if(!isChanged() || isSaved) 
             return
 
-        const ret = await API.addNote(title?title:'Không có tiêu đề', content, 'note')
+        const ret = await API.addNote(self.title?self.title:'Không có tiêu đề', self.content, 'task')
 
         if(!ret)
             Alert.alert("Tạo mới không thành công", "",[{text: 'OK', type:'cancel'}])
@@ -44,29 +50,24 @@ export default function Detail({navigation, route}) {
         if(!isChanged() || isSaved) 
             return
 
-        const ret = await API.editNote(self.id ,title?title:'Không có tiêu đề', content, 'note')
+        const ret = await API.editNote(self.id ,self.title?self.title:'Không có tiêu đề', self.content, 'task')
 
         if(!ret)
             Alert.alert("Thay đổi không thành công", "",[{text: 'OK', type:'cancel'}])
         else setIsSaved(true)
     }
 
-    var self = route.params.self
-    const [isSaved, setIsSaved] = useState(false)
-    const [title, setTitle] = useState('')
-    const [content, setContent] = useState('')
-    const [preContent, setPreContent] = useState('')
-    const [preTitle, setPreTitle] = useState('')
+    function addTask() {
+        var newSelf = Object.assign({}, self)
+        newSelf.content.push({content: '', isChecked: false})
+        setSelf(newSelf)
+    }
 
-    useFocusEffect(
-        useCallback(() => {
-            setContent(self?self.content:'')
-            setTitle(self?self.title:'')
-            setPreContent(self?self.content:'')
-            setPreTitle(self?self.title:'')
-            setIsSaved(false)
-        }, [])
-    )
+    function setTitle(text) {
+        newSelf = Object.assign({}, self)
+        newSelf.title = text
+        setSelf(newSelf)
+    }
 
     return (
         <View style={styles.container}>
@@ -82,7 +83,7 @@ export default function Detail({navigation, route}) {
 
                 <TouchableOpacity 
                     style={styles.saveContainer}
-                    onPress={route.params.self?editNote:addNote}
+                    onPress={gotInit?editNote:addNote}
                 >
                     <AntDesignIcon name="save" size={24} color={Color.blue}/>
                     <Text style={styles.saveText}>{' Lưu'}</Text>
@@ -93,26 +94,32 @@ export default function Detail({navigation, route}) {
             <TextInput
                 style={styles.title}
                 editable
-                maxLength={36}
+                maxLength={40}
                 cursorColor={Color.lightBlue}
                 selectionColor={Color.lightBlue}
                 placeholder="Nhập tiêu đề..."
                 placeholderTextColor={Color.lightWhite}
-                value={title}
+                value={self.title}
                 onChangeText={setTitle}
             />
 
-            <TextInput
+            <ScrollView
                 style={styles.content}
-                editable
-                multiline
-                maxLength={500}
-                cursorColor={Color.lightBlue}
-                selectionColor={Color.lightBlue}
-                placeholder="Nhập nội dung..."
-                placeholderTextColor={Color.lightWhite}
-                value={content}
-                onChangeText={setContent}
+            >
+                {
+                    self.content.map((o, index)=> {
+                        return <TaskItem
+                            key={index}
+                            index={index}
+                            self={self}
+                            setSelf={setSelf}
+                        />
+                    })
+                }
+            </ScrollView>
+
+            <AddButton
+                onPress={addTask}
             />
 
         </View>
